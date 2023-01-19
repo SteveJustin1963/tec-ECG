@@ -1,0 +1,109 @@
+# Input: R-R intervals data (rr_intervals)
+# Output: Root mean square of R-R intervals (hrv_rms)
+
+# Step 1: Initialize variables
+rr_count = len(rr_intervals)
+rr_squared_sum = 0
+
+# Step 2: Calculate sum of squared R-R intervals
+for rr in rr_intervals:
+    rr_squared_sum += rr ** 2
+
+# Step 3: Calculate root mean square of R-R intervals
+hrv_rms = (rr_squared_sum / rr_count) ** 0.5
+
+# Step 4: Output result
+print("Root mean square of R-R intervals:", hrv_rms)
+
+\\\\\\\\\\\\\\\\\\
+\\ forth
+\\
+: rr-count ( -- n )
+  \ Calculate number of R-R intervals
+  \ Input: none
+  \ Output: number of R-R intervals (n)
+  \ Initialize variable
+  0 >r
+  \ Loop through R-R intervals
+  BEGIN
+    r@ @ >r
+    1+ r@ !
+    r>
+  WHILE
+  \ Output result
+  r@
+;
+
+: rr-squared-sum ( -- n )
+  \ Calculate sum of squared R-R intervals
+  \ Input: none
+  \ Output: sum of squared R-R intervals (n)
+  \ Initialize variable
+  0 >r
+  \ Loop through R-R intervals
+  BEGIN
+    r@ @ dup * >r
+    1+ r@ !
+    r>
+  WHILE
+  \ Output result
+  r@
+;
+
+: hrv-rms ( -- n )
+  \ Calculate root mean square of R-R intervals
+  \ Input: none
+  \ Output: root mean square of R-R intervals (n)
+  \ Calculate number of R-R intervals
+  rr-count >r
+  \ Calculate sum of squared R-R intervals
+  rr-squared-sum dup >r
+  \ Calculate root mean square of R-R intervals
+  r@ / r> 0.5 power
+  \ Output result
+  r@
+;
+
+hrv-rms .
+\\\\\\\\\\\\\\\\\\
+// Calculate number of R-R intervals
+int rr_count()
+{
+  int count = 0;
+  // Loop through R-R intervals
+  while (rr_intervals[count]) {
+    count++;
+  }
+  return count;
+}
+
+// Calculate sum of squared R-R intervals
+int rr_squared_sum()
+{
+  int sum = 0;
+  int i = 0;
+  // Loop through R-R intervals
+  while (rr_intervals[i]) {
+    sum += (rr_intervals[i] * rr_intervals[i]);
+    i++;
+  }
+  return sum;
+}
+
+// Calculate root mean square of R-R intervals
+float hrv_rms()
+{
+  int rr_count = rr_count();
+  int rr_squared_sum = rr_squared_sum();
+  // Calculate root mean square of R-R intervals
+  float hrv_rms = pow((rr_squared_sum / rr_count), 0.5);
+  return hrv_rms;
+}
+
+int main()
+{
+  // Output result
+  printf("Root mean square of R-R intervals: %f\n", hrv_rms());
+  return 0;
+}
+\\\\\\\\\\\\\
