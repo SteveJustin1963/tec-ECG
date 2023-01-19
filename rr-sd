@@ -1,3 +1,5 @@
+\\\sudo
+
 # Input: R-R intervals data (rr_intervals)
 # Output: Standard deviation of R-R intervals (hrv_sd)
 
@@ -21,3 +23,74 @@ hrv_sd = (rr_diff_squared_sum / rr_count) ** 0.5
 # Step 5: Output result
 print("Standard deviation of R-R intervals:", hrv_sd)
 \\\\\\\\\\\\\\\
+\\ forth
+: rr-mean ( -- mean ) 
+  0 0 >r 
+  begin
+  dup @ r> + r> 1+ 
+  while 
+  repeat
+  r> 
+  swap / ;
+
+: rr-diff-sq ( rr mean -- diff-sq )
+  dup - dup * ;
+
+: hrv-sd ( rr mean -- hrv-sd )
+  0 >r 
+  begin
+  dup @ r> + r> 1+ 
+  while
+  rr-diff-sq
+  r> + 
+  repeat
+  r> 
+  swap / 0.5 pow ;
+
+: hrv ( rr -- hrv-sd )
+  rr-mean
+  hrv-sd ;
+
+: .hrv ( rr -- )
+  hrv . cr ;
+
+
+\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+\\ c code
+\\
+#include <stdio.h>
+#include <math.h>
+
+float rr_mean(int rr[], int rr_count) {
+    int sum = 0;
+    for (int i = 0; i < rr_count; i++) {
+        sum += rr[i];
+    }
+    return (float)sum / rr_count;
+}
+
+float rr_diff_sq(int rr, float mean) {
+    return pow(rr - mean, 2);
+}
+
+float hrv_sd(int rr[], int rr_count, float mean) {
+    float rr_diff_sq_sum = 0;
+    for (int i = 0; i < rr_count; i++) {
+        rr_diff_sq_sum += rr_diff_sq(rr[i], mean);
+    }
+    return pow(rr_diff_sq_sum / rr_count, 0.5);
+}
+
+float hrv(int rr[], int rr_count) {
+    float mean = rr_mean(rr, rr_count);
+    return hrv_sd(rr, rr_count, mean);
+}
+
+int main() {
+    int rr[] = {1, 2, 3, 4, 5};
+    int rr_count = sizeof(rr) / sizeof(rr[0]);
+    float hrv_sd = hrv(rr, rr_count);
+    printf("Standard deviation of R-R intervals: %f", hrv_sd);
+    return 0;
+}
+\\\\\\\\\\\\\\\\\\\\
