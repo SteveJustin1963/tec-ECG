@@ -1,0 +1,23 @@
+# Input: R-R intervals data (rr_intervals)
+# Output: Standard deviation of R-R intervals (hrv_sd)
+
+# Step 1: Initialize variables
+rr_count = len(rr_intervals)
+rr_mean = 0
+rr_diff_squared_sum = 0
+
+# Step 2: Calculate mean of R-R intervals
+for rr in rr_intervals:
+    rr_mean += rr
+rr_mean = rr_mean / rr_count
+
+# Step 3: Calculate sum of squared differences from mean
+for rr in rr_intervals:
+    rr_diff_squared_sum += (rr - rr_mean) ** 2
+
+# Step 4: Calculate standard deviation of R-R intervals
+hrv_sd = (rr_diff_squared_sum / rr_count) ** 0.5
+
+# Step 5: Output result
+print("Standard deviation of R-R intervals:", hrv_sd)
+\\\\\\\\\\\\\\\
